@@ -24,10 +24,3 @@ APawnBase::APawnBase()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 
 }
-
-// Called when the game starts or when spawned
-void APawnBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
