@@ -8,7 +8,8 @@
 APawnTank::APawnTank()
 {
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	RootComponent = SpringArm;
+	SpringArm->SetupAttachment(RootComponent);
+
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
@@ -41,7 +42,6 @@ void APawnTank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void APawnTank::CalculateMoveInput(float Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f"), GetWorld()->DeltaTimeSeconds);
 	MoveDirection = FVector(Value * MoveSpeed * GetWorld()->DeltaTimeSeconds, 0, 0);
 }
 
