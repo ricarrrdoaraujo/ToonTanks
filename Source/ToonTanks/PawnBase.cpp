@@ -3,6 +3,7 @@
 
 #include "PawnBase.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 APawnBase::APawnBase()
@@ -23,4 +24,39 @@ APawnBase::APawnBase()
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Projectile Spawn Point"));
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 
+}
+
+void APawnBase::RotateTurret(FVector LookAtTarget)
+{
+	// Uptadate TurretMesh rotation to face towards the LookAtTarget passed in from the child Class
+	//TurretMesh->SetWorldRotation...
+
+	FVector StartLocation = TurretMesh->GetComponentLocation();
+	FRotator TurretRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, FVector(LookAtTarget.X, LookAtTarget.Y, TurretMesh->GetComponentLocation().Z));
+
+	//Rotate turret
+	TurretMesh->SetWorldRotation(TurretRotation);
+
+	//Alternative:
+	/*FVector Start = TurretMesh->GetComponentLocation();
+	FRotator Rotation = (Target - Start).Rotation();
+	Rotation.Pitch = 0.f;
+	TurretMesh->SetWorldRotation(Rotation);*/
+}
+
+void APawnBase::Fire()
+{
+	// Get ProjectileSpawnPoint Location && Rotation -> spawn projectile class at location towards rotation
+	UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+}
+
+void APawnBase::HandleDestruction()
+{
+	// Universal functionality
+	// Play death effects Particle, sound and camera shake
+
+	//then do unique child override
+	// PawnTurret - inform GameMode Turret died -> then Destroy() self.
+
+	// PawnTank - inform GameMode Player died -> then Hide() all components && stop movement Input.
 }
