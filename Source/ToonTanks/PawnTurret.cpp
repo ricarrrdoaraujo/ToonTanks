@@ -55,3 +55,9 @@ float APawnTurret::ReturnDistanceToPlayer()
 	float Distance = (PlayerPawn->GetActorLocation() - GetActorLocation()).Size();
 	return Distance;
 }
+
+void APawnTurret::HandleDestruction()
+{
+	Super::HandleDestruction();
+	Destroy();
+}
