@@ -4,6 +4,7 @@
 #include "PawnBase.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ProjectileBase.h"
 
 // Sets default values
 APawnBase::APawnBase()
@@ -38,16 +39,23 @@ void APawnBase::RotateTurret(FVector LookAtTarget)
 	TurretMesh->SetWorldRotation(TurretRotation);
 
 	//Alternative:
-	/*FVector Start = TurretMesh->GetComponentLocation();
-	FRotator Rotation = (Target - Start).Rotation();
-	Rotation.Pitch = 0.f;
-	TurretMesh->SetWorldRotation(Rotation);*/
+	/*FVector StartLocation = TurretMesh->GetComponentLocation();
+	FRotator TurretRotation = (LookAtTarget - StartLocation).Rotation();
+	TurretRotation.Pitch = 0.f;
+	TurretMesh->SetWorldRotation(TurretRotation);*/
 }
 
 void APawnBase::Fire()
 {
 	// Get ProjectileSpawnPoint Location && Rotation -> spawn projectile class at location towards rotation
-	UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+	if (ProjectileClass)
+	{
+		FVector SpawnLocation = ProjectileSpawnPoint->GetComponentLocation();
+		FRotator SpawnRotation = ProjectileSpawnPoint->GetComponentRotation();
+
+		AProjectileBase* TempProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, SpawnLocation, SpawnRotation);
+		TempProjectile->SetOwner(this);
+	}
 }
 
 void APawnBase::HandleDestruction()
